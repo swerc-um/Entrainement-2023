@@ -1,4 +1,4 @@
-== Concours blanc : https://vjudge.net/contest/533262
+# Concours blanc : https://vjudge.net/contest/533262
 
 * A - Email from Polycarp : https://vjudge.net/contest/533262#problem/A
     * Glouton
