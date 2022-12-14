@@ -1,1 +1,3 @@
-# entra-nement-2023
+# Entraînements 2023
+
+* Semaine 1 : introduction & stratégies de recherche
