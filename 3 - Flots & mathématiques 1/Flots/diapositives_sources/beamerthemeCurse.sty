@@ -1,0 +1,248 @@
+% Curse theme — Version 0.1
+% A lightweight non-intrusive Beamer theme
+%
+% Written in 2020 by:
+% — Mattéo Delabre <spam@delab.re>
+%
+% Based on the Bruno beamer theme written in 2017–2019 by:
+% — Rémi Cérès <remiceres@msn.com>
+% — Mattéo Delabre <spam@delab.re>
+%
+% Based on the Metropolis theme written in 2015–2018 by:
+% — Matthias Vogelgesang <contact@bloerg.net>
+%
+% This work is released under the CC0 1.0 Universal license. See the
+% accompanying LICENSE file for details. To the extent possible under
+% law, Rémi Cérès and Mattéo Delabre have waived all copyright and
+% related or neighboring rights to the Curse theme. This work is published
+% from France.
+
+\mode<presentation>
+
+% Package dependencies
+\RequirePackage{etoolbox}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Colors
+\definecolor{curseblue}{HTML}{182936}
+\definecolor{cursefadedblue}{HTML}{71828F}
+\definecolor{cursemarroon}{HTML}{704730}
+
+\definecolor{cursedarkgray}{HTML}{BFBFBF}
+\definecolor{curselightgray}{HTML}{FEFEFE}
+
+%% Structure
+\setbeamercolor{structure}{fg=curseblue}
+\setbeamercolor{normal text}{fg=curseblue}
+\setbeamercolor{separator}{fg=cursemarroon, bg=cursemarroon}
+
+\setbeamercolor{background canvas}{bg=curselightgray}
+
+%% Blocks
+\setbeamercolor{block body}{bg=curselightgray}
+\setbeamercolor{block title}{bg=curseblue, fg=white}
+
+%% Inverted colors
+\newcommand{\invert}[1]{{
+    \setbeamercolor{background canvas}{bg=curseblue}
+    \setbeamercolor{structure}{fg=curselightgray}
+    \setbeamercolor{normal text}{fg=curselightgray}
+    #1
+}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Fonts
+\RequirePackage[no-math]{fontspec}
+
+\setsansfont[
+    Ligatures=TeX,
+    Extension={.otf},
+    UprightFont={font/* Regular},
+    BoldFont={font/* Bold},
+    ItalicFont={font/* Italic},
+    BoldItalicFont={font/* Bold Italic},
+]{Concourse T3}
+
+\setmainfont[
+    Ligatures=TeX,
+    Extension={.otf},
+    UprightFont={font/* Regular},
+    BoldFont={font/* Bold},
+    Numbers=OldStyle,
+    Scale=1.15,
+]{Concourse C3}
+
+%% Title page
+\setbeamerfont{title}{
+    size=\large,
+    family=\rmfamily
+}
+
+\setbeamerfont{author}{
+    size=\normalsize,
+    shape=\normalfont
+}
+
+\setbeamerfont{details}{
+    size=\footnotesize,
+    shape=\normalfont
+}
+
+%% Slide title
+\setbeamerfont{frametitle}{
+    size=\large,
+    family=\rmfamily,
+}
+
+\setbeamerfont{framesubtitle}{
+    size=\large,
+    shape=\normalfont,
+}
+
+%% Blocks
+\setbeamerfont{block title}{
+    size=\normalfont,
+    shape=\strut
+}
+
+\setbeamerfont{blockdef}{
+    size=\large,
+    shape=\bfseries
+}
+
+%% Tables of contents
+\setbeamerfont{section in toc}{shape=\bfseries}
+\setbeamerfont{section in toc shaded}{shape=\normalfont}
+
+%% Speaker notes
+\setbeamerfont{note page}{
+    size=\large,
+}
+
+%% Fix text color when using “show notes on second screen”
+\def\beamer@framenotesbegin{% at beginning of slide
+    \usebeamercolor[fg]{normal text}
+    \gdef\beamer@noteitems{}% 
+    \gdef\beamer@notes{}% 
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% Layout
+\setlength{\parskip}{1em}
+
+\setbeamertemplate{sections/subsections in toc}[square]
+\setbeamertemplate{section in toc shaded}[default][100]
+\setbeamertemplate{itemize item}{{\tiny\raise2pt\hbox{$\!{\blacktriangleright}$}}}
+\setbeamertemplate{itemize subitem}[circle]
+\setbeamertemplate{enumerate item}[square]
+\setbeamertemplate{itemize/enumerate subbody end}{\vspace{1em}}
+
+\newcommand{\deemph}[1]{{\rmfamily\small #1}}
+
+% Allow multi-slide frames
+\setbeamertemplate{frametitle continuation}{}
+
+% Horizontal separator
+\setbeamertemplate{separator}{%
+    \usebeamercolor{separator}%
+    \raisebox{2.5pt}{\textcolor{fg}{\rule{.7\textwidth}{.5pt}}}%
+}
+
+% Title page
+
+%% Separate authors with newlines
+\renewcommand{\beamer@andtitle}{\\}
+
+\setbeamertemplate{title page}{%
+    \vspace{.8cm}
+    \centering
+    \usebeamerfont{title}
+    \MakeLowercase{\inserttitle}
+
+    \vspace{.2cm}
+    \usebeamerfont{author}
+    \insertauthor
+
+    \vspace{.2cm}
+    \usebeamertemplate{separator}
+
+    \vspace{.35cm}
+    \usebeamerfont{details}
+    \insertinstitute\\
+    \insertdate
+
+}
+
+\renewcommand{\maketitle}{{
+    \setbeamertemplate{footline}{}
+    \begin{frame}[c,noframenumbering]
+        \titlepage
+    \end{frame}
+}}
+
+% Table of contents page
+
+%% Remove vfills between items in tables of contents
+\patchcmd{\beamer@sectionintoc}
+    {\vfill}
+    {\vskip\itemsep}
+    {}
+    {}
+
+%% Insert a table of contents highlighting the current section
+\newcommand{\maketoc}{
+    \begin{frame}[c]{Plan}
+        \vfill
+        \tableofcontents[currentsection]
+    \end{frame}
+}
+
+% Note page
+\setbeamertemplate{note page}{%
+    \vspace{1cm}%
+    {\usebeamerfont{frametitle} transparent \insertframenumber\par}
+
+    \vspace{.2cm}%
+    \insertnote
+}
+
+% Backup/extra frames
+\newenvironment{backupframes}{%
+    \newcounter{finalframe}%
+    \setcounter{finalframe}{\value{framenumber}}%
+}{%
+
+    \setcounter{framenumber}{\value{finalframe}}%
+}
+
+% Normal slide header
+\setbeamertemplate{frametitle}{%
+    \vspace{.5cm}%
+    \usebeamerfont{frametitle}\MakeLowercase{\insertframetitle}\par%
+    \usebeamerfont{framesubtitle}\insertframesubtitle\par%
+    \vspace{.25cm}%
+}
+
+% Remove the useless navigation symbols
+\setbeamertemplate{navigation symbols}{}
+
+% Remove the distracting header line
+\setbeamertemplate{headline}{}
+
+% Footer information line with author and slide number
+\setbeamertemplate{footline}{%
+    \usebeamerfont{footline}%
+    \raisebox{0pt}[\height][0.5cm]{%
+        \makebox[\textwidth][r]{%
+            \insertshortauthor%
+            \hspace{2em}%
+            \insertframenumber{} / \inserttotalframenumber%
+            \hspace{1cm}%
+        }%
+    }
+}
+
+\mode<all>

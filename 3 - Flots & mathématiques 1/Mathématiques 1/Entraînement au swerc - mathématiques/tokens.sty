@@ -1,0 +1,188 @@
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{tokens}[2019/04/06 Jetons de Rózsa]
+
+\RequirePackage{tikz} % pour dessiner les jetons
+\RequirePackage{xcolor}
+\RequirePackage{listofitems} % pour analyser les suites de jetons
+\RequirePackage{xfp} % pour le calcul flottant
+
+% Bordure des jetons
+\definecolor{token@border}{HTML}{7F7F7F}
+
+% Fonctions de base
+\definecolor{token@blue top}{HTML}{33CCCC}
+\definecolor{token@blue bottom}{HTML}{4040BF}
+
+% Constructeurs de projection
+\definecolor{token@green top}{HTML}{A5CC33}
+\definecolor{token@green bottom}{HTML}{408C40}
+
+% Constructeurs de composition, récursion et minimisation
+\definecolor{token@orange top}{HTML}{CCCC33}
+\definecolor{token@orange bottom}{HTML}{BF4040}
+
+% Autres jetons
+\definecolor{token@gray top}{HTML}{CCCCCC}
+\definecolor{token@gray bottom}{HTML}{808080}
+
+%% Écrit un texte entouré d’un contour
+%
+% Arguments :
+%  — couleur du texte
+%  — couleur du contour
+%  — taille du contour
+%  — texte à afficher
+%
+% Les couleurs sont spécifiées sous la forme d’une liste de nombres :
+%   — s’il y a un nombre, il est interprété comme un niveau de gris ;
+%   — s’il y a trois nombres, ils sont interprétés en RGB ;
+%   — s’il y a quatre nombres, ils sont interprétés en CMYK.
+\newlength{\token@stroke@width}
+\newcommand{\token@contour}[4]{%
+    % Activation des couleurs du contour
+    \special{pdf:bcolor [#1] [#2]}%
+    % On définit la largeur du contour comme facteur de la taille de police
+    \setlength{\token@stroke@width}{\f@size pt}%
+    % Commandes bas-niveau PDF
+    %   — w : taille du contour
+    %   — j : type de jonction de contour (1 pour arrondi)
+    %   — J : type d’extrémités de contour (1 pour arrondi)
+    %   — Tr : active le contourage du texte
+    \special{pdf:literal direct \fpeval{#3*\f@size} w 1 j 1 J 2 Tr}%
+    #4%
+    \special{pdf:ecolor}%
+    \special{pdf:literal direct 0 Tr}%
+}
+
+%% Pour les jetons à étiquette textuelle
+%
+% Arguments :
+%   — ajustement vertical de l’étiquette
+%   — réglages de police
+%   – texte à afficher
+\newcommand{\token@label}[3]{
+    \tikzset{
+        token label/.style={
+            inner sep=0pt,
+            outer sep=0pt,
+            anchor=base
+        }
+    }
+    \node[token label, opacity=.1, yshift=#1, font=#2]
+        at (0, -.25\token@size)
+        {\token@contour{0}{1}{.35}{#3}};
+    \node[token label, opacity=.3, yshift=#1, font=#2]
+        at (0, -.25\token@size)
+        {\token@contour{0}{1}{.25}{#3}};
+    \node[token label, opacity=.6, yshift=#1, font=#2]
+        at (0, -.25\token@size)
+        {\token@contour{0}{1}{.15}{#3}};
+    \node[token label, yshift=#1, font=#2]
+        at (0, -.25\token@size) {#3};
+}
+
+%% Pour les jetons à étiquette symbolique
+%
+% Arguments :
+%   – point central de mise à l’échelle du chemin
+%   — chemin à dessiner
+\newcommand{\token@shape}[2]{
+    \fill[white, opacity=.1, scale around={2:#1}, rounded corners=4pt] #2;
+    \fill[white, opacity=.3, scale around={1.7:#1}, rounded corners=3pt] #2;
+    \fill[white, opacity=.6, scale around={1.4:#1}, rounded corners=2pt] #2;
+    \fill[black, rounded corners=.5pt] #2;
+}
+
+%% Dessine un jeton au sein d’un graphique TikZ
+%
+% Arguments :
+%   — jeu de couleurs à utiliser (blue, green, orange, gray)
+%   — contenu du jeton
+%   — point d’ancrage du centre du jeton
+\newlength{\token@size}
+\newcommand{\token@raw}[3]{%
+\begin{scope}[shift={#3}]
+    % Dimension d’un jeton : 130 % de la taille du texte
+    \setlength{\token@size}{1.3em}%
+    %
+    % Chemin de la bordure du jeton
+    \def\token@path{
+        (-.5\token@size, -.5\token@size)
+        -- ++(\token@size, 0)
+        -- ++(0, \token@size)
+        -- ++(-\token@size, 0)
+        -- cycle
+    }%
+    % Génération du fond du jeton
+    \path[
+        shading=axis,
+        top color=token@#1 top,
+        bottom color=token@#1 bottom,
+        rounded corners=.3\token@size,
+    ] \token@path;
+    %
+    \begin{scope}
+        \clip \token@path;
+        % Fioritures circulaires
+        \fill[white, opacity=.2] (0, \token@size) circle (\token@size);
+        \fill[white, opacity=.2] (.5\token@size, .5\token@size) circle (.35\token@size);
+        
+        % Contenu du jeton
+        #2
+    \end{scope}
+    %
+    % Génération de la bordure du jeton
+    \draw[
+        token@border,
+        rounded corners=.3\token@size
+    ] \token@path;
+\end{scope}
+}
+
+%% Dessine un jeton désigné par son nom
+\newcommand{\token}[2]{%
+  \ifstrequal{#1}{0}{%
+    \token@raw{blue}{\token@label{0}{\bfseries}{0}}{#2}%
+}{\ifstrequal{#1}{I}{%
+    \token@raw{blue}{\token@label{0}{\bfseries}{I}}{#2}%
+}{\ifstrequal{#1}{S}{%
+    \token@raw{blue}{\token@label{0}{\bfseries}{S}}{#2}%
+}{\ifstrequal{#1}{<}{%
+    \token@raw{green}{\token@shape{(.1\token@size, 0)}{
+        (.25\token@size, 0)
+        -- ++(0, .25\token@size)
+        -- ++(-.5\token@size, -.25\token@size)
+        -- ++(.5\token@size, -.25\token@size)
+        -- cycle
+    }}{#2}%
+}{\ifstrequal{#1}{>}{%
+    \token@raw{green}{\token@shape{(-.1\token@size, 0)}{
+        (-.25\token@size, 0)
+        -- ++(0, .25\token@size)
+        -- ++(.5\token@size, -.25\token@size)
+        -- ++(-.5\token@size, -.25\token@size)
+        -- cycle
+    }}{#2}%
+}{\ifstrequal{#1}{C}{%
+    \token@raw{orange}{\token@label{.075em}{\normalfont}{o\hspace{-.375em}o}}{#2}%
+}{\ifstrequal{#1}{R}{%
+    \token@raw{orange}{\token@label{0}{\normalfont\bfseries}{R}}{#2}%
+}{\ifstrequal{#1}{M}{%
+    \token@raw{orange}{\token@label{0}{\normalfont\bfseries}{μ}}{#2}%
+}{%
+    \token@raw{gray}{\token@label{0}{\normalfont\bfseries}}{#1}%
+}}}}}}}}}
+
+%% Affiche un jeton en mode texte
+\newcommand{\texttoken}[1]{%
+\begin{tikzpicture}[baseline=-0.5ex]%
+\token{#1}{(0,0)}%
+\end{tikzpicture}%
+}
+
+%% Convertit une suite de jeton en visuel
+\newcommand{\tokens}[1]{%
+    \setsepchar{ }%
+    \readlist\alltokens{#1}%
+    \foreachitem\onetoken\in\alltokens{\expandafter\texttoken\onetoken}%
+}

@@ -1,0 +1,8 @@
+7 150
+BEF Hors_d_oeuvre Appetizer 30
+BEF Appetizer Main_course 30
+SIM Main_course Bread_1 5
+BEF Main_course Cheese 30
+SIM Cheese Bread_2 5
+BEF Cheese Dessert 30
+BEF Bread_1 Bread_2 45

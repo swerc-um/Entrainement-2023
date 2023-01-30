@@ -1,0 +1,3 @@
+Trie : https://fr.wikipedia.org/wiki/Trie_(informatique)
+Arbre des suffixes : https://fr.wikipedia.org/wiki/Arbre_des_suffixes
+Tableau des suffixes : https://fr.wikipedia.org/wiki/Tableau_des_suffixes

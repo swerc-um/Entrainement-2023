@@ -1,0 +1,17 @@
+PGCD / PPCM :
+- UVa 11388, “GCD LCM”: https://vjudge.net/problem/UVA-11388 - https://onlinejudge.org/index.php?option=onlinejudge&Itemid=8&page=show_problem&problem=2383
+- UVa 10814, “Simplifying Fractions”: https://vjudge.net/problem/UVA-10814 - https://onlinejudge.org/index.php?option=onlinejudge&Itemid=8&page=show_problem&problem=1755
+
+Coefficients de Bézout :
+- Codeforces 633A, “Ebony and Ivory”: https://vjudge.net/problem/CodeForces-633A - https://codeforces.com/contest/633/problem/A
+- UVa 10090, “Marbles”: https://vjudge.net/problem/UVA-10090 - https://onlinejudge.org/index.php?option=com_onlinejudge&Itemid=8&page=show_problem&problem=1031
+
+Restes chinois :
+- UVa 756, “Biorhythms”: https://vjudge.net/problem/UVA-756 - https://onlinejudge.org/index.php?option=onlinejudge&Itemid=8&page=show_problem&problem=697
+- AoC 2020-13, “Shuttle Search”: https://adventofcode.com/2020/day/13
+
+Nombres de Catalan:
+- Bracket Sequences I : https://cses.fi/problemset/task/2064
+
+Pivot de Gauss :
+- Por Costel and Bujor: https://vjudge.net/problem/Gym-100923C - https://codeforces.com/gym/100923/problem/C 

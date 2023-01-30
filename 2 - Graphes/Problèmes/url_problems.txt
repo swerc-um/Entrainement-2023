@@ -1,0 +1,4 @@
+French Dinner: https://www.acmicpc.net/problem/15408
+Environment-Friendly Travel: https://codeforces.com/gym/102501/problem/A
+Dark roads: https://www.spoj.com/problems/ULM09/
+The Door Problem: https://codeforces.com/contest/776/problem/D
