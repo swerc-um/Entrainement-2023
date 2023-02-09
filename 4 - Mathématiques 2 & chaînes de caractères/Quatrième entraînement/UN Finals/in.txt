@@ -1,0 +1,7 @@
+5
+A ABF B
+F F F
+B B B
+A A A
+F AF FB
+2
